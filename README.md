@@ -1,4 +1,5 @@
-# Final Project Report
+
+Final Project Report
 ------------------------------------------------------------------------
 
 ## Initial code description
@@ -6,6 +7,7 @@
 `code/data_cleaning.R`
 
   - cleans data so it can be more easily analyzed
+  - produces clean data in `output/ASD_clean.R`
 
 `code/render_report.R`
 
@@ -22,4 +24,5 @@
 
 ### Make
 
-Run `make final_report.html` in the terminal while in the project directory
+  - Run `make final_report.html` in the terminal while in the project directory to generate the complete final report
+  - Run `make clean` to remove contents of the output folder and `final_report.html`
