@@ -1,0 +1,48 @@
+---
+title: "ASD Prevalance based on Study Design"
+output: html_document
+author: "Natalie Block"
+date: '`r format(Sys.time(), "%B %d, %Y")`'
+---
+# Introduction
+This dataset contains information collected from peer-reviewed autism prevalence studies. The dataset has information about the findings of these studies and also about the study design. The goal in my analysis is to see if there is a difference in autism prevalance findings based on differing study design.
+
+
+
+```{r, loading, include = FALSE}
+#load dataset
+here::i_am("final_report.Rmd")
+data<-readRDS(here::here("output/ASD_clean.RDS"))
+
+#loading packages
+library("gtsummary")
+library("ggplot2")
+```
+
+
+
+# Tables
+## Regression of Prevalence with Case Identification Type
+The table shows the regression of Prevalence with Case Identification Type. Case ID type was determined to be remote if case identification occurred through mail, records, or on a registry. Case ID type was determined to be interactive if case identification occurred in-person, over the phone, or through an interview. This model shows a significant decrease in detected prevalence of ASD if identification was done remotely. In further research, the model will be fine-tuned to account for additional variables.
+
+```{r, regression, echo = FALSE}
+#creating linear model of prevalence
+prevalence_model<-lm(ASD.Prevalence.Estimate.per.1.000~id_type, data=data)
+summary_prevalence_model<-summary(prevalence_model)
+
+#creating table for linear model
+regression_table<-tbl_regression(prevalence_model)
+regression_table %>% modify_header(label='Prevalence')
+```
+
+# Figures
+## Boxplot of ASD Prevalance by Highest Age Group Represented in the Study
+This box plot shows the ASD prevalence estimate per 1000 population based on the highest age category of participants for each study. Age categories were determined as follows: infant (0-1 yrs), toddler (2-3 yrs), preschool (4-5 yrs), grade school (6-12 yrs), teen (13-18 yrs), and adult (18+ yrs).
+
+```{r, graph, echo=FALSE, fig.cap = "Estimation of ASD prevalence per 1000 population by maximum age group represented in the study"}
+#creating graph of case upper age limit by prevalence
+age_upper_prevalance<-ggplot(data, aes(age_upper_cat, ASD.Prevalence.Estimate.per.1.000, color=age_upper_cat))+geom_boxplot()+labs(title= "ASD Prevalance by Age Limit of Study", y="Prevelance per 1000 Population", x="Highest Age Group in Study")
+print(age_upper_prevalance)
+```
+
+```
